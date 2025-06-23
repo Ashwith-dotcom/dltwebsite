@@ -60,6 +60,30 @@ const Karna = () => {
   const gridImagesRef = useRef([]);
   const gridVideoRefs = useRef([]);
 
+  // Form state for Book Now section
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    requirements: ''
+  });
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log('Form submitted:', formData);
+    // You can add API call or email service here
+  };
+
   const scrollToVideo = React.useCallback((index) => {
     if (!gridRef.current) return;
     
@@ -487,7 +511,7 @@ const Karna = () => {
             </VideoSection>
           </ContentSection>
           <GridSection className="grid-section">
-            <GridHeading className="grid-heading">Our Specs</GridHeading>
+            <GridHeading className="grid-heading">Our Specs.</GridHeading>
             <GalleryGrid>
               {[
                 { img: image1, video: video5, title: "Battery" },
@@ -511,6 +535,113 @@ const Karna = () => {
               ))}
             </GalleryGrid>
           </GridSection>
+          <BookNowSection>
+            <BookNowContainer>
+              <BookNowLeft>
+                <BookNowHeading>Any customizations needed?</BookNowHeading>
+                <BookNowContactList>
+                  <BookNowContactItem>
+                    <BookNowContactIcon>📞</BookNowContactIcon>
+                    <BookNowContactDetails>
+                      <BookNowContactLabel>Call us</BookNowContactLabel>
+                      <BookNowContactValue>+91 8074296912</BookNowContactValue>
+                    </BookNowContactDetails>
+                  </BookNowContactItem>
+                  <BookNowContactItem>
+                    <BookNowContactIcon>📧</BookNowContactIcon>
+                    <BookNowContactDetails>
+                      <BookNowContactLabel>Mail us</BookNowContactLabel>
+                      <BookNowContactValue>contact@digileaf.co.in</BookNowContactValue>
+                    </BookNowContactDetails>
+                  </BookNowContactItem>
+                  <BookNowContactItem>
+                    <BookNowContactIcon>📍</BookNowContactIcon>
+                    <BookNowContactDetails>
+                      <BookNowContactLabel>Find us</BookNowContactLabel>
+                      <BookNowContactValue>3-535, Ayyappa Society, Chanda Naik Nagar, Madhapur
+                      Hyderabad, Telangana</BookNowContactValue>
+                    </BookNowContactDetails>
+                  </BookNowContactItem>
+                  <BookNowContactItem>
+                    <BookNowContactIcon>⏰</BookNowContactIcon>
+                    <BookNowContactDetails>
+                      <BookNowContactLabel>Visit us</BookNowContactLabel>
+                      <BookNowContactValue>Monday – Friday<br/>10AM – 6PM</BookNowContactValue>
+                    </BookNowContactDetails>
+                  </BookNowContactItem>
+                </BookNowContactList>
+              </BookNowLeft>
+              <BookNowRight>
+                <FormCard>
+                  <FormTitle>Book Now / Enquiry.</FormTitle>
+                  <BookingForm onSubmit={handleFormSubmit}>
+                    <FormGrid>
+                      <FormGroup>
+                        <FormLabel htmlFor="name">Your name *</FormLabel>
+                        <FormInput
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleFormChange}
+                          required
+                          placeholder="Enter name"
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <FormLabel htmlFor="email">Your email *</FormLabel>
+                        <FormInput
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleFormChange}
+                          required
+                          placeholder="Enter email"
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <FormLabel htmlFor="phonenumber">Your Phone Number</FormLabel>
+                        <FormInput
+                          type="text"
+                          id="phonenumber"
+                          name="phonenumber"
+                          value={formData.phonenumber}
+                          onChange={handleFormChange}
+                          placeholder="Enter phone number"
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <FormLabel htmlFor="location">Location</FormLabel>
+                        <FormInput
+                          type="text"
+                          id="location"
+                          name="location"
+                          value={formData.location || ''}
+                          onChange={handleFormChange}
+                          placeholder="Enter your location"
+                        />
+                      </FormGroup>
+                    </FormGrid>
+                    <FormTextareaWrapper>
+                      <FormLabel htmlFor="requirements">Message</FormLabel>
+                      <FormTextarea
+                        id="requirements"
+                        name="requirements"
+                        value={formData.requirements}
+                        onChange={handleFormChange}
+                        maxLength={250}
+                        placeholder="Type here..."
+                        required
+                      />
+                      <CharCount>{(formData.requirements || '').length}/250</CharCount>
+                    </FormTextareaWrapper>
+                    <SubmitButton type="submit">Send</SubmitButton>
+                  </BookingForm>
+                </FormCard>
+              </BookNowRight>
+            </BookNowContainer>
+          </BookNowSection>
         </ContentWrapper>
       </MainContent>
     </>
@@ -833,11 +964,13 @@ const NavLink = styled.a`
 
 const GridSection = styled.section`
   background: black;
-  min-height: 100vh;
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 7rem 2rem;
+  padding-top: 7rem;
+
+  padding-left: 2rem;
+  padding-right: 2rem;
   transform-origin: top;
   will-change: transform;
 `;
@@ -872,7 +1005,7 @@ const GalleryGrid = styled.div`
 
 const GalleryItem = styled.div`
   position: relative;
-  border-radius: 0.25rem;
+  border-radius: 1rem;
   overflow: hidden;
   aspect-ratio: 9/16;
   cursor: pointer;
@@ -902,6 +1035,8 @@ const GalleryImage = styled.img`
   left: 0;
   transition: opacity 0.3s ease;
   z-index: 1;
+  border-radius: 1rem;
+  margin: 5%;
 `;
 
 const GalleryVideo = styled.video`
@@ -914,21 +1049,227 @@ const GalleryVideo = styled.video`
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
+  border-radius: 1rem;
+  margin: 5%;
 `;
 
 const GalleryItemTitle = styled.h3`
   position: absolute;
-  bottom: 20%;
-  left: 0;
+  bottom: 17%;
+  left: 5%;
   width: 100%;
   padding: 1rem;
   background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
   color: white;
   font-size: 1.2rem;
+  border-radius: 1rem;
   font-weight: 500;
   margin: 0;
   z-index: 2;
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`;
+
+const BookNowSection = styled.section`
+  background: #f7f8fa;
+  min-height: 80vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+`;
+
+const BookNowContainer = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 600px;
+  background: white;
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px rgba(80,84,143,0.08);
+  overflow: hidden;
+  margin: 4rem 2rem;
+  @media (max-width: 900px) {
+    flex-direction: column;
+    min-height: unset;
+  }
+`;
+
+const BookNowLeft = styled.div`
+  flex: 1;
+  background: white;
+  padding: 4rem 3rem 4rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @media (max-width: 900px) {
+    padding: 2rem;
+  }
+`;
+
+const BookNowHeading = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 600;
+  color:rgb(80, 84, 143);
+  margin-bottom: 2.5rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`;
+
+const BookNowContactList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const BookNowContactItem = styled.li`
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+`;
+
+const BookNowContactIcon = styled.span`
+  font-size: 1.3rem;
+  margin-right: 1.2rem;
+  color: #565573;
+  margin-top: 0.2rem;
+`;
+
+const BookNowContactDetails = styled.div`
+  color: #181a2a;
+  font-size: 1.1rem;
+  line-height: 1.5;
+`;
+
+const BookNowContactLabel = styled.div`
+  font-weight: 600;
+  color: #565573;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+`;
+
+const BookNowContactValue = styled.div`
+  font-size: 1.1rem;
+`;
+
+const BookNowRight = styled.div`
+  flex: 1.2;
+  background: #f7f8fa;
+  padding: 4rem 4rem 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @media (max-width: 900px) {
+    padding: 2rem;
+  }
+`;
+
+const FormCard = styled.div`
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(80,84,143,0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 100%;
+`;
+
+const FormTitle = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(80, 84, 143);
+  margin-bottom: 2rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`;
+
+const BookingForm = styled.form`
+  width: 100%;
+`;
+
+const FormGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FormLabel = styled.label`
+  font-size: 1rem;
+  font-weight: 500;
+  color: #565573;
+  margin-bottom: 0.5rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`;
+
+const FormInput = styled.input`
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 0.7rem;
+  background: #f7f8fa;
+  color: #181a2a;
+  font-size: 1rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: border-color 0.3s;
+  &:focus {
+    outline: none;
+    border-color: #565573;
+    background: #fff;
+  }
+`;
+
+const FormTextareaWrapper = styled.div`
+  margin-bottom: 1.2rem;
+`;
+
+const FormTextarea = styled.textarea`
+  width: 100%;
+  padding: 1rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 0.7rem;
+  background: #f7f8fa;
+  color: #181a2a;
+  font-size: 1rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 110px;
+  resize: vertical;
+  transition: border-color 0.3s;
+  &:focus {
+    outline: none;
+    border-color: #565573;
+    background: #fff;
+  }
+`;
+
+const CharCount = styled.div`
+  text-align: right;
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+`;
+
+const SubmitButton = styled.button`
+  padding: 0.9rem 0;
+  width: 120px;
+  border: none;
+  border-radius: 0.7rem;
+  background: #181a2a;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(80,84,143,0.08);
+  &:hover {
+    background: #565573;
+    transform: translateY(-2px);
+  }
 `;
 
 export default Karna;

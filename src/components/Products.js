@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
+  const navigate = useNavigate();
   const controls = useAnimation();
   const [ref, inView] = useInView({
     threshold: 0.2,
@@ -75,6 +77,18 @@ const Products = () => {
       left: 380,
       behavior: 'smooth'
     });
+  };
+
+  // Navigation handlers
+  const handleSpecificationsClick = () => {
+    navigate('/karna');
+  };
+
+  const handleInquireClick = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
@@ -263,8 +277,8 @@ const Products = () => {
                   </ProductFeatures>
                   
                   <ProductActions>
-                    <ActionButton>Specifications</ActionButton>
-                    <ActionButton primary>Inquire</ActionButton>
+                    <ActionButton onClick={handleSpecificationsClick}>Specifications</ActionButton>
+                    <ActionButton primary onClick={handleInquireClick}>Inquire</ActionButton>
                   </ProductActions>
                 </ProductContent>
                 
