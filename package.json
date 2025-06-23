@@ -2,6 +2,7 @@
   "name": "dltwebsite",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://digileaf.co.in",
   "dependencies": {
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.1",
